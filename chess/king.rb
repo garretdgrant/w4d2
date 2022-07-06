@@ -9,12 +9,11 @@ include Steppable
 
     def initialize(color, board, pos)
         super(color, board, pos)
-        # if color == "W"
-            # @symbol = "\u2654".encode("utf-8")
-            @symbol = :K
-        # else
-            # @symbol = "\u265A".encode("utf-8")
-        # end
+        if color == "W"
+            @symbol = :♔
+        else
+            @symbol = :♚
+        end
 
     end
 

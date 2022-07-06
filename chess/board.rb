@@ -89,7 +89,7 @@ class Board
         enemies = []
         
         @rows.each do |row|
-            king += row.select{|piece| piece.symbol == :K && piece.color == color }
+            king += row.select{|piece| (piece.symbol == :♔ || piece.symbol == :♚)  && piece.color == color }
             enemies += row.select{|piece| piece.color != color && piece.color != "N"}
         end
         
