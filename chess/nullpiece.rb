@@ -9,4 +9,8 @@ class NullPiece
         @symbol = :_
     end
 
+    # def =(pos)
+    #     nil
+    # end
+
 end

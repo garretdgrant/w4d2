@@ -5,10 +5,12 @@ require_relative "queen"
 require_relative "knight"
 require_relative "king"
 require_relative "pawn"
-require_relative "piece"
+require "byebug"
 require_relative "cursor"
 
 class Board
+    attr_reader :rows 
+
     def initialize
         @rows = Array.new(8){Array.new(8, NullPiece.instance)}
         populate
@@ -63,11 +65,12 @@ class Board
     end
 
     def move_piece(start_pos, end_pos)
-        # if self[start_pos].valid_move?(end_pos)
+        temp_piece = self[start_pos]
+        # if !self[start_pos].valid_move?
         #     raise "Invalid Move"
         # end
 
-        if self[start_pos] == NullPiece.instance || self[start_pos] == nil
+        if  self[start_pos] == nil
             raise "No Piece to Move"
         end
 
@@ -78,6 +81,49 @@ class Board
         self[end_pos] = self[start_pos]
         self[end_pos].pos = end_pos
         self[start_pos] = NullPiece.instance
+    end
+
+    # # checks if the given color is in check
+    def in_check?(color)
+        king = []
+        enemies = []
+        
+        @rows.each do |row|
+            king += row.select{|piece| piece.symbol == :K && piece.color == color }
+            enemies += row.select{|piece| piece.color != color && piece.color != "N"}
+        end
+        
+        enemies.each do |piece|
+            moves = piece.get_moves
+           return true if moves.include?(king[0].pos)
+        end
+        false
+    end
+
+    # checks if color given is in checkmate
+    def checkmate?(color)
+        all_teammates = []
+        @rows.each do |row|
+            all_teammates += row.select{|piece| piece.color == color }
+        end
+
+        all_teammates.each do |piece|
+            moves = piece.get_moves
+            moves.each do |move|
+                # debugger
+                temp_piece = self[move]
+                old_pos = piece.pos
+                
+                self.move_piece(old_pos, move)
+                is_valid = piece.valid_move?
+                self.move_piece(move, old_pos)
+                self[move] = temp_piece if temp_piece != NullPiece.instance
+                return false if is_valid == true
+                
+            end
+        end
+        true
+
     end
 
     def render
@@ -94,24 +140,13 @@ end
 if __FILE__ == $PROGRAM_NAME
 
 b = Board.new
-# k = King.new("W", b, [6,7])
-# p k.valid_move?([7,7])
-# pawn = Pawn.new("W", b, [5, 1])
+b.move_piece([0,3], [3,7])
+b.move_piece([7,4], [3,5])
+# p b.in_check?("W")
+b.move_piece([7,7], [5,7])
+b.move_piece([3,7], [4,7])
+# p b.in_check?("W")
+p b.checkmate?("W")
 b.render
-p b[[0,4]].get_moves
 
-b.move_piece([0,4], [5,1]) # move white pawn
-b.render
-p b[[5,1]].get_moves
-
-# p pawn.valid_move?([6,2])
-# p pawn.valid_move?([6,0])
-# rook = Rook.new("W", b, [0,0])
-# rook2 = Rook.new("W", b, [3,3])
-# b.move_piece([7,0],[3,4])
-# b.move_piece([],[])
-# p rook.get_moves
-# puts
-# p rook2.get_moves
-# b.render
 end

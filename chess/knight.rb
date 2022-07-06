@@ -1,13 +1,19 @@
 require_relative "piece"
 require_relative "steppable"
 
-class Knight  < Piece
+class Knight < Piece
 include Steppable
     POSSIBLE_MOVES = [ [1, -2], [2, -1], [2, 1], [1, 2], [-1, 2], [-2, 1], [-2, -1], [-1, -2] ]
 
     def initialize(color, board, pos)
         super(color, board, pos)
-        @symbol = :Kn
+        if color == "W"
+            # @symbol = "\u2655".encode("utf-8")
+            @symbol = :♘
+        else
+            # @symbol = "\u265B".encode("utf-8")
+            @symbol = :♞
+        end
     end
 
     def get_moves

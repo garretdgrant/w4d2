@@ -9,7 +9,13 @@ include Steppable
 
     def initialize(color, board, pos)
         super(color, board, pos)
-        @symbol = :P
+        if color == "W"
+            # @symbol = "\u2655".encode("utf-8")
+            @symbol = :♙
+        else
+            # @symbol = "\u265B".encode("utf-8")
+            @symbol = :♟
+        end
     end
 
     def get_moves
