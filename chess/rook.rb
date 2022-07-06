@@ -1,13 +1,15 @@
 require_relative "piece"
+require_relative "slideable"
 
 class Rook < Piece
-        def initialize(color, board, pos)
+include Slideable
+
+    def initialize(color, board, pos)
         super(color, board, pos)
         @symbol = :R
     end
 
-    private
-    def move_dirs
-        vertical_up = [0,1]
+    def get_moves
+       slide_down + slide_up + slide_left + slide_right
     end
 end

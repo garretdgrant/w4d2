@@ -6,6 +6,7 @@ require_relative "knight"
 require_relative "king"
 require_relative "pawn"
 require_relative "piece"
+require_relative "cursor"
 
 class Board
     def initialize
@@ -62,9 +63,9 @@ class Board
     end
 
     def move_piece(start_pos, end_pos)
-        if self[start_pos].valid_move?(end_pos)
-            raise "Invalid Move"
-        end
+        # if self[start_pos].valid_move?(end_pos)
+        #     raise "Invalid Move"
+        # end
 
         if self[start_pos] == NullPiece.instance || self[start_pos] == nil
             raise "No Piece to Move"
@@ -75,6 +76,7 @@ class Board
         end
 
         self[end_pos] = self[start_pos]
+        self[end_pos].pos = end_pos
         self[start_pos] = NullPiece.instance
     end
 
@@ -92,7 +94,24 @@ end
 if __FILE__ == $PROGRAM_NAME
 
 b = Board.new
-k = King.new("W", b, [6,7])
-p k.valid_move?([7,7])
-# b.move_piece()
+# k = King.new("W", b, [6,7])
+# p k.valid_move?([7,7])
+# pawn = Pawn.new("W", b, [5, 1])
+b.render
+p b[[0,4]].get_moves
+
+b.move_piece([0,4], [5,1]) # move white pawn
+b.render
+p b[[5,1]].get_moves
+
+# p pawn.valid_move?([6,2])
+# p pawn.valid_move?([6,0])
+# rook = Rook.new("W", b, [0,0])
+# rook2 = Rook.new("W", b, [3,3])
+# b.move_piece([7,0],[3,4])
+# b.move_piece([],[])
+# p rook.get_moves
+# puts
+# p rook2.get_moves
+# b.render
 end
