@@ -22,6 +22,12 @@ class Piece
         !@board.in_check?(@color)
     end
 
+    def future_move_valid?(end_pos)
+        dup = @board.duped_board
+        dup.move_piece(self.pos, end_pos)
+        !dup.in_check?(@color)
+    end
+
     def pos=(val)
         @pos = val
     end

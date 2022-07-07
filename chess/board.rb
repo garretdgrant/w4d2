@@ -88,6 +88,7 @@ class Board
         king = []
         enemies = []
         
+        
         @rows.each do |row|
             king += row.select{|piece| (piece.symbol == :♔ || piece.symbol == :♚)  && piece.color == color }
             enemies += row.select{|piece| piece.color != color && piece.color != "N"}
@@ -99,6 +100,25 @@ class Board
         end
         false
     end
+
+    def duped_board
+        dup_board = Board.new
+        
+
+        @rows.each.with_index do |row, i|
+            row.each.with_index do |piece, j|
+                if piece.class == NullPiece
+                    dup_board[[i,j]] = NullPiece.instance
+                else
+                    temp_piece = piece.class.new(piece.color, dup_board,[i,j])
+                    dup_board[[i,j]] = temp_piece
+                end
+            end
+        end
+        dup_board
+    end
+
+
 
     # checks if color given is in checkmate
     def checkmate?(color)

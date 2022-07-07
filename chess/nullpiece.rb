@@ -4,7 +4,7 @@ class NullPiece
 
     attr_reader :color, :symbol
 
-    def initialize
+    def initialize(*arr)
         @color = "N"
         @symbol = :_
     end
